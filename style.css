@@ -31,7 +31,6 @@ span {
   flex-direction: column;
   width: 75vw;
   margin: 10px auto;
-  border: 2px solid grey;
 }
 
 #category-row {
@@ -43,19 +42,33 @@ span {
 
 #clue-board {
   flex-direction: column;
-  border: 2px solid blue;
 }
 
 .clue-row {
   display: flex;
-  border: 2px solid orange;
 }
 
 .clue-box {
   display: flex;
-  border: 2px solid green;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  background: blue;
+  color: white;
   border-radius: 5px;
   margin: 5px;
   height: 100px;
   flex: 1;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.category-box {
+  font-size: 0.8rem;
+  line-height: 25px;
+}
+
+.clicked {
+  font-size: 1rem;
 }
