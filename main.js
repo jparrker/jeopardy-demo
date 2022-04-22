@@ -32,10 +32,6 @@ function initBoard() {
   }
 }
 
-function getClue() {
-  console.log("hi");
-}
-
 function randInt() {
   return Math.floor(Math.random() * 18418 + 1);
 }
@@ -93,5 +89,49 @@ function setCategories(catArray) {
   let children = element.children;
   for (let i = 0; i < children.length; i++) {
     children[i].innerHTML = catArray[i].title;
+  }
+}
+
+function getClue(event) {
+  let child = event.currentTarget;
+  child.classList.add("clicked-box");
+  let boxValue = child.innerHTML.slice(1);
+  let parent = child.parentNode;
+  let index = Array.prototype.findIndex.call(
+    parent.children,
+    (c) => c === child
+  );
+  let cluesList = catArray[index].clues;
+  let clue = cluesList.find((obj) => {
+    return obj.value == boxValue;
+  });
+  console.log(clue);
+  showQuestion(clue, child, boxValue);
+}
+function showQuestion(clue, target, boxValue) {
+  let userAnswer = prompt(clue.question).toLowerCase();
+  let correctAnswer = clue.answer.toLowerCase().replace(/<\/?[^>]+(>|$)/g, "");
+  let possiblePoints = +boxValue;
+  target.innerHTML = clue.answer;
+  target.removeEventListener("click", getClue, false);
+  evaluateAnswer(userAnswer, correctAnswer, possiblePoints);
+}
+
+function evaluateAnswer(userAnswer, correctAnswer, possiblePoints) {
+  let checkAnswer = userAnswer == correctAnswer ? "correct" : "incorrect";
+  let confirmAnswer = confirm(
+    `For $${possiblePoints}, you answered "${userAnswer}", and the correct answer was "${correctAnswer}". Your answer appears to be ${checkAnswer}. Click OK to accept or click Cancel if the answer was not properly evaluated.`
+  );
+  awardPoints(checkAnswer, confirmAnswer, possiblePoints);
+}
+
+function awardPoints(checkAnswer, confirmAnswer, possiblePoints) {
+  if (!(checkAnswer == "incorrect" && confirmAnswer == true)) {
+    let target = document.getElementById("score");
+    let currentScore = +target.innerText;
+    currentScore += possiblePoints;
+    target.innerText = currentScore;
+  } else {
+    alert(`No points awarded.`);
   }
 }
